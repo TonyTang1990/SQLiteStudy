@@ -1,0 +1,11 @@
+# 文件以及目录过滤
+# 过滤library目录
+SqliteStudy/Library/
+# 过滤.vs目录
+SqliteStudy/.vs/
+# 过滤Temp目录
+SqliteStudy/Temp/
+# 过滤obj目录
+SqliteStudy/obj/
+# 过滤Log目录
+SqliteStudy/Logs/
