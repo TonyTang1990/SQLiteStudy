@@ -31,31 +31,11 @@ public class GameLauncher : MonoBehaviour
     /// </summary>
     public Text TxtOutput;
 
-    /// <summary>
-    /// 数据库目录路径
-    /// </summary>
-    private string DatabaseFolderPath = string.Empty;
-
-    /// <summary>
-    /// 数据库连接
-    /// </summary>
-    private SQLiteConnection mSQLiteConnect;
-
-    /// <summary>
-    /// 数据库文件名
-    /// </summary>
-    private const string DatabaseName = "TestDatabase.db";
-
     private void Start()
     {
-#if UNITY_EDITOR
-        DatabaseFolderPath = "Assets/StreamingAssets/";
-#else
-        DatabaseFolderPath = $"{Application.persistentDataPath}/";
-#endif
         // 建立数据库连接
-        mSQLiteConnect = new SQLiteConnection($"{DatabaseFolderPath}/{DatabaseName}", SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create);
-
+        GameDatabase.Singleton.LoadDatabase();
+        
         Application.logMessageReceived +=  this.HandleLog;
     }
 
@@ -71,7 +51,7 @@ public class GameLauncher : MonoBehaviour
     {
         Debug.Log("OnBtnCreatePlayerTable()");
         // 创建数据库表(Player)
-        mSQLiteConnect.CreateTable<Player>();
+        GameDatabase.Singleton.CreateTable<Player>();
         PrintPlayerDatas($"创建玩家表成功!");
     }
 
@@ -82,35 +62,35 @@ public class GameLauncher : MonoBehaviour
     {
         Debug.Log("OnBtnInsertData()");
         // 填充数据
-        mSQLiteConnect.Insert(new Player
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
         {
             UID = 1,
             FirstName = "Huan",
             LastName = "Tang",
             Age = 29,
         });
-        mSQLiteConnect.Insert(new Player
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
         {
             UID = 3,
             FirstName = "XiaoYun",
             LastName = "Zhou",
             Age = 28,
         });
-        mSQLiteConnect.Insert(new Player
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
         {
             UID = 2,
             FirstName = "Jiang",
             LastName = "Fan",
             Age = 28,
         });
-        mSQLiteConnect.Insert(new Player
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
         {
             UID = 5,
             FirstName = "ZhenLiang",
             LastName = "Li",
             Age = 29,
         });
-        mSQLiteConnect.Insert(new Player
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
         {
             UID = 4,
             FirstName = "XiaoLin",
@@ -129,7 +109,7 @@ public class GameLauncher : MonoBehaviour
         var deleteuid = -1;
         if (int.TryParse(IfInput1.text, out deleteuid))
         {
-            mSQLiteConnect.Delete<Player>(deleteuid);
+            GameDatabase.Singleton.DeleteDataByUIDI<Player>(deleteuid);
             PrintPlayerDatas($"删除UID:{IfInput1.text}数据成功!");
         }
         else
@@ -148,7 +128,7 @@ public class GameLauncher : MonoBehaviour
         if (int.TryParse(IfInput1.text, out modifyuid))
         {
             Debug.Log($"修改UID:{IfInput1.text}数据!");
-            var valideplayer = mSQLiteConnect.Find<Player>((player) => player.UID == modifyuid);
+            var valideplayer = GameDatabase.Singleton.GetDataByUIDI<Player>(modifyuid);
             if(valideplayer != null)
             {
                 var newage = -1;
@@ -156,7 +136,7 @@ public class GameLauncher : MonoBehaviour
                 {
                     var oldage = valideplayer.Age;
                     valideplayer.Age = newage;
-                    mSQLiteConnect.Update(valideplayer);
+                    GameDatabase.Singleton.UpdateDataI(valideplayer);
                     PrintPlayerDatas($"修改UID:{IfInput1.text}的年纪:{oldage}到:{newage}!");
                 }
                 else
@@ -185,7 +165,7 @@ public class GameLauncher : MonoBehaviour
         if (int.TryParse(IfInput1.text, out queryuid))
         {
             Debug.Log($"");
-            var valideplayer = mSQLiteConnect.Get<Player>(queryuid);
+            var valideplayer = GameDatabase.Singleton.GetDataByUIDI<Player>(queryuid);
             if (valideplayer != null)
             {
                 PrintPlayerDatas($"查询UID:{IfInput1.text}数据!\n{valideplayer.ToString()}!");
@@ -207,7 +187,7 @@ public class GameLauncher : MonoBehaviour
     public void OnBtnDeleteAllPlayerData()
     {
         Debug.Log("OnBtnDeleteAllPlayerData()");
-        var rownumberaffected = mSQLiteConnect.DeleteAll<Player>();
+        var rownumberaffected = GameDatabase.Singleton.DeleteTableAllData<Player>();
         PrintPlayerDatas($"删除所有玩家表数据,影响的行数:{rownumberaffected}!");
     }
 
@@ -217,8 +197,17 @@ public class GameLauncher : MonoBehaviour
     public void OnBtnDeletePlayerTable()
     {
         Debug.Log("OnBtnDeletePlayerTable()");
-        var rownumberaffected = mSQLiteConnect.DropTable<Player>();
-        PrintPlayerDatas($"删除玩家表,返回影响的行数:{rownumberaffected}!");
+        var rownumberaffected = GameDatabase.Singleton.DeleteTable<Player>();
+        PrintPlayerDatas($"删除玩家表,返回影响的行数:{rownumberaffected}!", false);
+    }
+
+    /// <summary>
+    /// 查询玩家表是否存在
+    /// </summary>
+    public void OnBtnExistPlayerTable()
+    {
+        Debug.Log("OnBtnExistPlayerTable()");
+        // TOOD: 待实现
     }
 
     /// <summary>
@@ -233,21 +222,26 @@ public class GameLauncher : MonoBehaviour
     /// 打印输出玩家表信息
     /// </summary>
     /// <param name="extrainfo">额外信息</param>
-    public void PrintPlayerDatas(string extrainfo = "")
+    /// <param name="printAllData">是否打印所有数据</param>
+    public void PrintPlayerDatas(string extrainfo = "", bool printAllData = true)
     {
-        var result = "玩家表数据:\n";
-        var playertb = mSQLiteConnect.Table<Player>();
-        foreach (var player in playertb)
+        var result = string.Empty;
+        if (printAllData)
         {
-            result += player.ToString();
-            result += "\n";
+            result += "玩家表数据:\n";
+            var playertb = GameDatabase.Singleton.GetAllData<Player>();
+            foreach (var player in playertb)
+            {
+                result += player.ToString();
+                result += "\n";
+            }
         }
         Debug.Log(extrainfo + "\n" + result);
     }
 
     private void OnDestroy()
     {
-        mSQLiteConnect.Close();
+        GameDatabase.Singleton.CloseDatabase();
         Application.logMessageReceived -= this.HandleLog;
     }
 }

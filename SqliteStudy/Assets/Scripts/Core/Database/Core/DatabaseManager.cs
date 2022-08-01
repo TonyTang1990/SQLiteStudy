@@ -1,4 +1,4 @@
-/*
+ï»¿/*
  * Description:             DatabaseManager.cs
  * Author:                  TANGHUAN
  * Create Date:             2020/03/13
@@ -14,28 +14,28 @@ using UnityEngine;
 namespace TH.Modules.Data
 {
     /// <summary>
-    /// Êı¾İ¿â¹ÜÀíÀà
-    /// Ö÷Òª¹¦ÄÜÈçÏÂ:
-    /// 1. Êı¾İ¿âÂ·¾¶´¦Àí(Êı¾İ¿â´æ´¢¹ÜÀí)
-    /// 2. ¶àÊı¾İ¿âÖ§³Ö
-    /// 3. Êı¾İ¿âÁ¬½Ó£¬¹Ø±Õ£¬CUID²Ù×÷µÈ²Ù×÷ÒÀÈ»Ê¹ÓÃSQLiteµÄ·â×°
+    /// æ•°æ®åº“ç®¡ç†ç±»
+    /// ä¸»è¦åŠŸèƒ½å¦‚ä¸‹:
+    /// 1. æ•°æ®åº“è·¯å¾„å¤„ç†(æ•°æ®åº“å­˜å‚¨ç®¡ç†)
+    /// 2. å¤šæ•°æ®åº“æ”¯æŒ
+    /// 3. æ•°æ®åº“è¿æ¥ï¼Œå…³é—­ï¼ŒCUIDæ“ä½œç­‰æ“ä½œä¾ç„¶ä½¿ç”¨SQLiteçš„å°è£…
     /// </summary>
     public class DatabaseManager : SingletonTemplate<DatabaseManager>
     {
         /// <summary>
-        /// Êı¾İ¿âÎÄ¼ş¼ĞµØÖ·
+        /// æ•°æ®åº“æ–‡ä»¶å¤¹åœ°å€
         /// </summary>
         private readonly static string DatabaseFolderPath = Application.persistentDataPath + "/Database/";
 
         /// <summary>
-        /// ÒÑÁ¬½ÓµÄÊı¾İ¿âÓ³ÉäMap
-        /// KeyÎªÊı¾İ¿âÃû£¬ValueÎª¶ÔÓ¦µÄÊı¾İ¿âÁ¬½Ó
+        /// å·²è¿æ¥çš„æ•°æ®åº“æ˜ å°„Map
+        /// Keyä¸ºæ•°æ®åº“åï¼ŒValueä¸ºå¯¹åº”çš„æ•°æ®åº“è¿æ¥
         /// </summary>
         private Dictionary<string, SQLiteConnection> ConnectedDatabaseMap;
 
         public DatabaseManager()
         {
-            //¼ì²éÊı¾İ¿âÎÄ¼şÄ¿Â¼ÊÇ·ñ´æÔÚ
+            //æ£€æŸ¥æ•°æ®åº“æ–‡ä»¶ç›®å½•æ˜¯å¦å­˜åœ¨
             if(!Directory.Exists(DatabaseFolderPath))
             {
                 Directory.CreateDirectory(DatabaseFolderPath);
@@ -44,28 +44,31 @@ namespace TH.Modules.Data
         }
 
         /// <summary>
-        /// ´ò¿ªÊı¾İ¿âÁ¬½Ó
+        /// æ‰“å¼€æ•°æ®åº“è¿æ¥
         /// </summary>
         /// <param name="databasename"></param>
         /// <param name="openflags"></param>
         /// <param name="storeDateTimeAsTicks"></param>
-        public void openDatabase(string databasename, SQLiteOpenFlags openflags = SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, bool storeDateTimeAsTicks = false)
+        public SQLiteConnection openDatabase(string databasename, SQLiteOpenFlags openflags = SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.Create, bool storeDateTimeAsTicks = false)
         {
             if(!isDatabaseConnected(databasename))
             {
                 var databasepath = DatabaseFolderPath + databasename;
                 var connection = new SQLiteConnection(databasepath, openflags, storeDateTimeAsTicks);
                 ConnectedDatabaseMap.Add(databasename, connection);
-                Debug.Log($"Á¬½ÓÊı¾İ¿â:{databasename}");
+                Debug.Log($"è¿æ¥æ•°æ®åº“:{databasename}");
+                return connection;
             }
             else
             {
-                Debug.Log($"Êı¾İ¿â:{databasename}ÒÑÁ¬½Ó,ÇëÎğÖØ¸´Á¬½Ó!");
+                Debug.Log($"æ•°æ®åº“:{databasename}å·²è¿æ¥,è¯·å‹¿é‡å¤è¿æ¥!");
+                var connect = getDatabaseConnection(databasename);
+                return connect;
             }
         }
         
         /// <summary>
-        /// »ñÈ¡Ö¸¶¨Êı¾İ¿âÁ¬½Ó
+        /// è·å–æŒ‡å®šæ•°æ®åº“è¿æ¥
         /// </summary>
         /// <param name="databasename"></param>
         /// <returns></returns>
@@ -83,7 +86,7 @@ namespace TH.Modules.Data
         }
 
         /// <summary>
-        /// ¹Ø±ÕÊı¾İ¿âÁ¬½Ó
+        /// å…³é—­æ•°æ®åº“è¿æ¥
         /// </summary>
         /// <param name="databasename"></param>
         public void closeDatabase(string databasename)
@@ -93,16 +96,16 @@ namespace TH.Modules.Data
             {
                 connection.Close();
                 ConnectedDatabaseMap.Remove(databasename);
-                Debug.Log($"¹Ø±ÕÊı¾İ¿â:{databasename}");
+                Debug.Log($"å…³é—­æ•°æ®åº“:{databasename}");
             }
             else
             {
-                Debug.LogError($"Î´Á¬½ÓÊı¾İ¿â:{databasename},¹Ø±ÕÊ§°Ü!");
+                Debug.LogError($"æœªè¿æ¥æ•°æ®åº“:{databasename},å…³é—­å¤±è´¥!");
             }
         }
 
         /// <summary>
-        /// ¹Ø±ÕËùÓĞÒÑÁ¬½ÓµÄÊı¾İ¿â
+        /// å…³é—­æ‰€æœ‰å·²è¿æ¥çš„æ•°æ®åº“
         /// </summary>
         public void closeAllDatabase()
         {
@@ -113,7 +116,7 @@ namespace TH.Modules.Data
         }
 
         /// <summary>
-        /// Çå³ı
+        /// æ¸…é™¤
         /// </summary>
         public void clear()
         {
@@ -121,7 +124,7 @@ namespace TH.Modules.Data
         }
 
         /// <summary>
-        /// Ö¸¶¨Êı¾İ¿âÊÇ·ñÒÑÁ¬½Ó
+        /// æŒ‡å®šæ•°æ®åº“æ˜¯å¦å·²è¿æ¥
         /// </summary>
         /// <param name="databasename"></param>
         /// <returns></returns>
@@ -130,12 +133,12 @@ namespace TH.Modules.Data
             return ConnectedDatabaseMap.ContainsKey(databasename);
         }
 
-        #region ¸¨Öú·½·¨
+        #region è¾…åŠ©æ–¹æ³•
         /// <summary>
-        /// »ñÈ¡Ö¸¶¨Êı¾İ¿â±íµÄËùÓĞÊı¾İ
+        /// è·å–æŒ‡å®šæ•°æ®åº“è¡¨çš„æ‰€æœ‰æ•°æ®
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="databasename">Êı¾İ¿âÃû</param>
+        /// <param name="databasename">æ•°æ®åº“å</param>
         /// <returns></returns>
         public string getTableAllDatasInOneString<T>(string databasename) where T : new()
         {

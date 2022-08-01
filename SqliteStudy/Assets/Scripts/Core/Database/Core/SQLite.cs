@@ -381,17 +381,17 @@ namespace SQLite4Unity3d
 
 			return Execute (query);
 		}
-		
-		/// <summary>
-		/// Executes a "create table if not exists" on the database. It also
-		/// creates any specified indexes on the columns of the table. It uses
-		/// a schema automatically generated from the specified type. You can
-		/// later access this schema by calling GetMapping.
-		/// </summary>
-		/// <returns>
-		/// The number of entries added to the database schema.
-		/// </returns>
-		public int CreateTable<T>(CreateFlags createFlags = CreateFlags.None)
+
+        /// <summary>
+        /// Executes a "create table if not exists" on the database. It also
+        /// creates any specified indexes on the columns of the table. It uses
+        /// a schema automatically generated from the specified type. You can
+        /// later access this schema by calling GetMapping.
+        /// </summary>
+        /// <returns>
+        /// The number of entries added to the database schema.
+        /// </returns>
+        public int CreateTable<T>(CreateFlags createFlags = CreateFlags.None)
 		{
 			return CreateTable(typeof (T), createFlags);
 		}
