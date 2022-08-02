@@ -18,7 +18,25 @@ namespace TH.Modules.Data
     public abstract class BaseStringTableData : BaseTableData
     {
         [PrimaryKey]
-        public string UID { get; set; }
+        public string UID
+        {
+            get;
+            set;
+        }
+
+        public BaseStringTableData() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="uid"></param>
+        public BaseStringTableData(string uid) : base()
+        {
+            UID = uid;
+        }
 
         /// <summary>
         /// 打印数据

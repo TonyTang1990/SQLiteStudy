@@ -21,7 +21,25 @@ namespace TH.Modules.Data
         /// 主键UID
         /// </summary>
         [PrimaryKey]
-        public int UID { get; set; }
+        public int UID
+        {
+            get;
+            set;
+        }
+
+        public BaseIntTableData() : base()
+        {
+
+        }
+
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="uid"></param>
+        public BaseIntTableData(int uid) : base()
+        {
+            UID = uid;
+        }
 
         /// <summary>
         /// 打印所有表数据

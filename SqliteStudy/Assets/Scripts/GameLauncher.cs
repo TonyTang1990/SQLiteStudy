@@ -62,41 +62,11 @@ public class GameLauncher : MonoBehaviour
     {
         Debug.Log("OnBtnInsertData()");
         // 填充数据
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 1,
-            FirstName = "Huan",
-            LastName = "Tang",
-            Age = 29,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 3,
-            FirstName = "XiaoYun",
-            LastName = "Zhou",
-            Age = 28,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 2,
-            FirstName = "Jiang",
-            LastName = "Fan",
-            Age = 28,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 5,
-            FirstName = "ZhenLiang",
-            LastName = "Li",
-            Age = 29,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 4,
-            FirstName = "XiaoLin",
-            LastName = "Kuang",
-            Age = 28,
-        });
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(1, "Huan", "Tang", 29));
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(3, "XiaoYun", "Zhou", 28));
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(2, "Jiang", "Fan", 28));
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(5, "ZhenLiang", "Li", 29));
+        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(4, "XiaoLin", "Kuang", 28));
         PrintPlayerDatas($"插入玩家数据成功!");
     }
 

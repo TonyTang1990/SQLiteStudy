@@ -27,18 +27,49 @@ public class Player : BaseIntTableData
     /// <summary>
     /// 名
     /// </summary>
-    public string FirstName { get; set; }
+    public string FirstName
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// 姓
     /// </summary>
-    public string LastName { get; set; }
+    public string LastName
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// 年龄
     /// </summary>
     [Indexed]
-    public int Age { get; set; }
+    public int Age
+    {
+        get;
+        set;
+    }
+
+    public Player() : base()
+    {
+
+    }
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="firstName"></param>
+    /// <param name="lastName"></param>
+    /// <param name="age"></param>
+    public Player(int uid, string firstName, string lastName, int age) : base(uid)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+    }
 
     /// <summary>
     /// 打印数据
@@ -73,41 +104,11 @@ GameDatabase.Singleton.CreateTable<Player>();
 ### 玩家表插入玩家数据
 
 ```CS
-GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 1,
-            FirstName = "Huan",
-            LastName = "Tang",
-            Age = 29,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 3,
-            FirstName = "XiaoYun",
-            LastName = "Zhou",
-            Age = 28,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 2,
-            FirstName = "Jiang",
-            LastName = "Fan",
-            Age = 28,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 5,
-            FirstName = "ZhenLiang",
-            LastName = "Li",
-            Age = 29,
-        });
-        GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player
-        {
-            UID = 4,
-            FirstName = "XiaoLin",
-            LastName = "Kuang",
-            Age = 28,
-        });
+GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(1, "Huan", "Tang", 29));
+GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(3, "XiaoYun", "Zhou", 28));
+GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(2, "Jiang", "Fan", 28));
+GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(5, "ZhenLiang", "Li", 29));
+GameDatabase.Singleton.InsertOrReplaceDataI<Player>(new Player(4, "XiaoLin", "Kuang", 28));
 ```
 
 ![InsertPlayerTableData](/img/Database/InsertPlayerTableData.png)
@@ -186,7 +187,7 @@ public int DropTable<T>()
 ### 关闭数据库连接
 
 ```CS
-        GameDatabase.Singleton.CloseDatabase();
+GameDatabase.Singleton.CloseDatabase();
 ```
 
 # 博客

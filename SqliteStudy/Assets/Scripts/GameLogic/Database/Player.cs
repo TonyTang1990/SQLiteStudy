@@ -18,18 +18,49 @@ public class Player : BaseIntTableData
     /// <summary>
     /// 名
     /// </summary>
-    public string FirstName { get; set; }
+    public string FirstName
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// 姓
     /// </summary>
-    public string LastName { get; set; }
+    public string LastName
+    {
+        get;
+        set;
+    }
 
     /// <summary>
     /// 年龄
     /// </summary>
     [Indexed]
-    public int Age { get; set; }
+    public int Age
+    {
+        get;
+        set;
+    }
+
+    public Player() : base()
+    {
+
+    }
+
+    /// <summary>
+    /// 构造函数
+    /// </summary>
+    /// <param name="uid"></param>
+    /// <param name="firstName"></param>
+    /// <param name="lastName"></param>
+    /// <param name="age"></param>
+    public Player(int uid, string firstName, string lastName, int age) : base(uid)
+    {
+        FirstName = firstName;
+        LastName = lastName;
+        Age = age;
+    }
 
     /// <summary>
     /// 打印数据
@@ -37,6 +68,6 @@ public class Player : BaseIntTableData
     /// <returns></returns>
     public override string ToString()
     {
-        return $"[Player: UId={UID}, FirstName={FirstName},  LastName={LastName}, Age={Age}]";
+        return $"[Player: UID={UID}, FirstName={FirstName},  LastName={LastName}, Age={Age}]";
     }
 }
