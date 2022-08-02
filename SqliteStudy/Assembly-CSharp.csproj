@@ -8,8 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <RootNamespace>
-    </RootNamespace>
+    <RootNamespace></RootNamespace>
     <ProjectGuid>{3A083838-BC6B-639C-B384-865AE2221195}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -57,18 +56,17 @@
     <Analyzer Include="G:\Software\VisualStudio\VS2019\Install\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Scripts\GameLauncher.cs" />
-    <Compile Include="Assets\Scripts\Core\Singleton\SingletonTemplate.cs" />
-    <Compile Include="Assets\Scripts\Core\Database\Core\SQLite.cs" />
-    <Compile Include="Assets\Scripts\Core\Database\Core\DatabaseManager.cs" />
-    <Compile Include="Assets\Scripts\Core\Database\DataStructure\Player.cs" />
-    <Compile Include="Assets\Scripts\Core\Singleton\SingletonMonoBehaviourTemplate.cs" />
-    <Compile Include="Assets\Scripts\GameLogic\Data\DatabaseConst.cs" />
+    <Compile Include="Assets\Scripts\Core\Database\Core\BaseIntTableData.cs" />
     <Compile Include="Assets\Scripts\Core\Database\Core\BaseDatabase.cs" />
     <Compile Include="Assets\Scripts\Core\Database\Core\BaseTableData.cs" />
-    <Compile Include="Assets\Scripts\Core\Database\Core\BaseIntTableData.cs" />
+    <Compile Include="Assets\Scripts\GameLauncher.cs" />
+    <Compile Include="Assets\Scripts\Core\Singleton\SingletonTemplate.cs" />
     <Compile Include="Assets\Scripts\Core\Database\Core\BaseStringTableData.cs" />
-    <Compile Include="Assets\Scripts\Core\Database\DataStructure\GameDatabase.cs" />
+    <Compile Include="Assets\Scripts\GameLogic\Database\GameDatabase.cs" />
+    <Compile Include="Assets\Scripts\Core\Database\Core\SQLite.cs" />
+    <Compile Include="Assets\Scripts\Core\Database\Core\DatabaseManager.cs" />
+    <Compile Include="Assets\Scripts\GameLogic\Database\Player.cs" />
+    <Compile Include="Assets\Scripts\Core\Singleton\SingletonMonoBehaviourTemplate.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="UnityEngine">

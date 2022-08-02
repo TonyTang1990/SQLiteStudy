@@ -57,11 +57,11 @@ namespace TH.Modules.Data
             return mSQLiteConnect != null;
         }
 
-        ///// <summary>
-        ///// 指定表是否存在
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <returns></returns>
+        /// <summary>
+        /// 指定表是否存在
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
         //public bool IsTableExist<T>() where T : BaseTableData, new()
         //{
         //    if (!IsConnected())
